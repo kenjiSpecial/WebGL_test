@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>20120925_particle</title>
+    <style type="text/css" media="screen">
+        body {
+            overflow: hidden;
+            margin: 0;
+        }
+
+        canvas {
+         }
+    </style>
+    <script type="x-shader/x-vertex" id="vertexshader">
+
+        attribute vec3 vcolor;
+        attribute float alpha;
+
+        varying vec3 fcolor;
+        varying float falpha;
+
+        uniform vec3 color;
+        uniform sampler2D texture;
+
+        void main(void){
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        gl_PointSize = 120.0 * (1.1 - alpha);
+        fcolor = vcolor;
+        falpha = alpha;
+        }
+
+    </script>
+
+    <script type="x-shader/x-fragment" id="fragmentshader">
+
+        uniform vec3 color;
+        uniform sampler2D texture;
+
+        varying vec3 fcolor;
+        varying float falpha;
+
+        void main(){
+        gl_FragColor = vec4(color * fcolor, 1.0);
+        gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord);
+
+        if(falpha > 0.0){
+        gl_FragColor.a *= falpha*falpha*falpha*falpha;
+        }else{
+        gl_FragColor.a *= 0.0;
+        }
+
+        }
+
+    </script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <script src="../libs/three.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="script.js"></script>
+</head>
+<body>
+    <div id="container"></div>
+</body>
+</html>

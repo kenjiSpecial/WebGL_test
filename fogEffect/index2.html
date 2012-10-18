@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<title></title>
+		<style type="text/css" media="screen">
+			body {
+				background: #ffffff;
+				margin: 0;
+			}
+			
+			canvas{
+				background: #000;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<script src="RequestAnimationFrame.js" type="text/javascript" charset="utf-8"></script>
+		<script src="three.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="dat.gui.js" type="text/javascript" charset="utf-8"></script>
+		<script type="x-shader/x-vertex" id="vertexshader">
+
+				attribute float size;
+				attribute vec3 pcolor;
+
+				varying vec3 vColor;
+
+				void main() {
+
+					vColor = pcolor;
+
+					vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+
+					gl_PointSize = size * ( 200.0 / length( mvPosition.xyz ) );
+
+					gl_Position = projectionMatrix * mvPosition;
+
+				}
+
+			</script>
+
+			<script type="x-shader/x-fragment" id="fragmentshader">
+
+				uniform sampler2D texture;
+
+				varying vec3 vColor;
+
+				void main() {
+
+					vec4 outColor = texture2D( texture, gl_PointCoord );
+
+					gl_FragColor = outColor * vec4( vColor, 1.0 );
+
+				}
+
+			</script>
+		<script src="script4.js" type="text/javascript" charset="utf-8"></script>
+
+	</body>
+</html>
